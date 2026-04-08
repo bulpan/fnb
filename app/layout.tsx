@@ -13,11 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "조셉 종목 분석기 (Joseph Stock Analyst)",
-  description: "Senior Quant AI Analyst for Korean Stocks",
-  icons: {
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>"
-  }
+  title: "성공한 F&B브랜드가 선택한 공간디자인 스튜디오",
+  description: "브랜드와 매출을 만드는 F&B 공간 디자인 스튜디오 - 공상플래닛",
 };
 
 export default function RootLayout({
@@ -26,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ko" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

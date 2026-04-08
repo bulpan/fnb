@@ -24,8 +24,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "공상플래닛 - F&B 공간 디자인 (New)",
-  description: "브랜드와 매출을 만드는 F&B 공간 디자인 포트폴리오 (new ver.)",
+  title: "성공한 F&B브랜드가 선택한 공간디자인 스튜디오",
+  description: "브랜드와 매출을 만드는 F&B 공간 디자인 스튜디오 - 공상플래닛",
 };
 
 export default function FnbNewLayout({ children }: { children: React.ReactNode }) {
