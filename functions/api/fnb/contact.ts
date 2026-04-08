@@ -150,7 +150,11 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       return new Response(JSON.stringify({ message: `노션 저장 실패: ${errData.message}` }), { status: 502, headers: { "Content-Type": "application/json" } });
     }
 
-    return new Response(JSON.stringify({ success: true, message: "접수 완료!" }), { status: 200, headers: { "Content-Type": "application/json" } });
+    return new Response(JSON.stringify({ 
+      success: true, 
+      message: "접수 완료!", 
+      debug: { matched_columns: colMap } // 어떤 컬럼들이 매칭되었는지 확인용
+    }), { status: 200, headers: { "Content-Type": "application/json" } });
 
   } catch (err: any) {
     return new Response(JSON.stringify({ message: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
