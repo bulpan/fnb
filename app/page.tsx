@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { projects } from "../fnb/shared/projectData";
+import { projects } from "@/app/fnb/shared/projectData";
 import FnbNewNavbar from "./sections/FnbNewNavbar";
 import FnbNewHero from "./sections/FnbNewHero";
 import FnbNewChallenges from "./sections/FnbNewChallenges";
