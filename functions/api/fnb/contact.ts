@@ -56,7 +56,7 @@ async function notionRequest(path: string, token: string, options: any) {
   });
 }
 
-export const onRequestPost: PagesFunction<Env> = async (context) => {
+export async function onRequestPost(context: { request: Request; env: Env }) {
   const { request, env } = context;
   const notionToken = env.NOTION_TOKEN;
   const notionDatabaseId = env.NOTION_DATABASE_ID;
@@ -138,4 +138,4 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   } catch (err: any) {
     return Response.json({ message: err.message || "서버 내부 오류" }, { status: 500 });
   }
-};
+}
