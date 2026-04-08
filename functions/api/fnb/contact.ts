@@ -1,5 +1,6 @@
 // Cloudflare Pages Function for F&B Contact Form Integration with Notion
 // Path: functions/api/fnb/contact.ts
+// Last Update: 2026-04-08 (Trigger for environment variables)
 
 interface Env {
   NOTION_TOKEN: string;
