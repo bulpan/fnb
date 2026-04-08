@@ -97,15 +97,16 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       phone: findProp(["연락처", "전화번호", "Phone"]),
       storeType: findProp(["매장 유형", "매장유형", "업종"]),
       location: findProp(["매장 위치", "매장위치", "지역"]),
-      area: findProp(["매장 면적", "평수", "면적"]),
+      area: findProp(["매장 면적(평)", "매장 면적", "평수", "면적"]), // 별칭 보강
       openDate: findProp(["오픈 예정일", "오픈예정일"]),
       budget: findProp(["예산 범위", "예산"]),
-      inquiryAt: findProp(["신청일시", "문의일시", "날짜"])
+      inquiryAt: findProp(["문의일시", "신청일시", "날짜"])
     };
 
     // 2. Build Properties
     const now = new Date();
     const kstDateText = formatKstDate(now);
+    const nowIso = now.toISOString(); // 노션 날짜형 전용 ISO 규격
     const notionProps: any = {};
 
     const addProp = (key: string | null, value: string, isTitle = false) => {
@@ -113,6 +114,9 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       const type = props[key].type;
       if (isTitle || type === "title") {
         notionProps[key] = { title: [{ text: { content: value } }] };
+      } else if (type === "date") {
+        // 날짜 타입 처리 (문의일시용)
+        notionProps[key] = { date: { start: nowIso } };
       } else if (type === "rich_text") {
         notionProps[key] = { rich_text: [{ text: { content: value } }] };
       } else if (type === "phone_number") {
