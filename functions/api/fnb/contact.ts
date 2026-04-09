@@ -5,7 +5,7 @@
 interface Env {
   NOTION_TOKEN: string;
   NOTION_DATABASE_ID: string;
-  SENDGRID_API_KEY?: string;
+  RESEND_API_KEY?: string;
   FNB_CONTACT_NOTIFY_EMAIL?: string;
   FNB_CONTACT_FROM_EMAIL?: string;
 }
@@ -175,7 +175,7 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
 }
 
 async function sendNotificationEmail(payload: any, env: Env, timestamp: string) {
-  const apiKey = env.SENDGRID_API_KEY?.trim();
+  const apiKey = env.RESEND_API_KEY?.trim();
   if (!apiKey) {
     return;
   }
@@ -187,7 +187,7 @@ async function sendNotificationEmail(payload: any, env: Env, timestamp: string) 
 
   const fromEmail = (env.FNB_CONTACT_FROM_EMAIL?.trim() || "no-reply@fnb-contact.com").toLowerCase();
 
-  const lines = [
+  const bodyLines = [
     "새로운 F&B 상담 신청이 들어왔습니다.",
     `접수일시: ${timestamp}`,
     `이름: ${payload.name || "-"}`,
@@ -203,29 +203,17 @@ async function sendNotificationEmail(payload: any, env: Env, timestamp: string) 
     "공상플래닛 F&B 공간디자인 스튜디오",
   ];
 
-  await fetch("https://api.sendgrid.com/v3/mail/send", {
+  await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      personalizations: [
-        {
-          to: [{ email: toEmail }],
-          subject: `[공상플래닛] 상담 신청 (${payload.name || "이름 없음"})`,
-        },
-      ],
-      from: {
-        email: fromEmail,
-        name: "공상플래닛",
-      },
-      content: [
-        {
-          type: "text/plain",
-          value: lines.join("\n"),
-        },
-      ],
+      from: `${fromEmail}`,
+      to: [toEmail],
+      subject: `[공상플래닛] 상담 신청 (${payload.name || "이름 없음"})`,
+      text: bodyLines.join("\n"),
     }),
   });
 }
