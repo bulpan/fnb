@@ -46,13 +46,10 @@ const heroStats = [
 
 export default function FnbNewHero() {
   return (
-    <section id="new-home" className="relative overflow-hidden pt-[72px] break-keep md:pt-[92px]">
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(80%_70%_at_50%_18%,rgba(205,185,145,0.22),rgba(0,0,0,0))]" />
-        <div className="absolute inset-0 bg-[radial-gradient(60%_48%_at_15%_58%,rgba(167,120,23,0.18),rgba(0,0,0,0))]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(15,16,18,0.46),rgba(15,16,18,0.86),rgba(15,16,18,1))]" />
-      </div>
-
+    <section
+      id="new-home"
+      className="relative overflow-hidden pt-[72px] break-keep md:pt-[92px] bg-[#0c0d10]"
+    >
       <div className="relative mx-auto grid max-w-[1360px] grid-cols-1 gap-6 px-5 pb-16 pt-3 md:grid-cols-12 md:gap-7 md:pb-24 md:pt-12">
         <motion.div
           className="md:col-span-5 md:flex md:h-[580px] md:flex-col"
