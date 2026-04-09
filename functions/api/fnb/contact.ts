@@ -201,6 +201,8 @@ async function sendNotificationEmail(payload: any, env: Env, timestamp: string) 
     `페이지: ${payload.pagePath || "-"}`,
     "",
     "공상플래닛 F&B 공간디자인 스튜디오",
+    "관련 노션 링크:",
+    "https://www.notion.so/33d4822f052780bdb680cb7fcd34a8bb?v=33d4822f05278036a13c000c665dd811",
   ];
 
   await fetch("https://api.resend.com/emails", {
