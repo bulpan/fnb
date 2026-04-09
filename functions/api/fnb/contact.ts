@@ -5,6 +5,9 @@
 interface Env {
   NOTION_TOKEN: string;
   NOTION_DATABASE_ID: string;
+  SENDGRID_API_KEY?: string;
+  FNB_CONTACT_NOTIFY_EMAIL?: string;
+  FNB_CONTACT_FROM_EMAIL?: string;
 }
 
 const fnbContactFieldOrder = ["name", "phone", "storeType", "location", "area", "openDate", "budget"];
@@ -154,13 +157,75 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
       return new Response(JSON.stringify({ message: `노션 저장 실패: ${errData.message}` }), { status: 502, headers: { "Content-Type": "application/json" } });
     }
 
-    return new Response(JSON.stringify({ 
-      success: true, 
-      message: "접수 완료!", 
-      debug: { matched_columns: colMap } // 어떤 컬럼들이 매칭되었는지 확인용
+    try {
+      await sendNotificationEmail(payload, env, kstDateText);
+    } catch (emailErr) {
+      console.error("Notifier email failed", emailErr);
+    }
+
+    return new Response(JSON.stringify({
+      success: true,
+      message: "접수 완료!",
+      debug: { matched_columns: colMap },
     }), { status: 200, headers: { "Content-Type": "application/json" } });
 
   } catch (err: any) {
     return new Response(JSON.stringify({ message: err.message }), { status: 500, headers: { "Content-Type": "application/json" } });
   }
+}
+
+async function sendNotificationEmail(payload: any, env: Env, timestamp: string) {
+  const apiKey = env.SENDGRID_API_KEY?.trim();
+  if (!apiKey) {
+    return;
+  }
+
+  const toEmail = (env.FNB_CONTACT_NOTIFY_EMAIL?.trim() || "bulpan@gmail.com").toLowerCase();
+  if (!toEmail) {
+    return;
+  }
+
+  const fromEmail = (env.FNB_CONTACT_FROM_EMAIL?.trim() || "no-reply@fnb-contact.com").toLowerCase();
+
+  const lines = [
+    "새로운 F&B 상담 신청이 들어왔습니다.",
+    `접수일시: ${timestamp}`,
+    `이름: ${payload.name || "-"}`,
+    `연락처: ${payload.phone || "-"}`,
+    `매장 유형: ${payload.storeType || "-"}`,
+    `위치: ${payload.location || "-"}`,
+    `면적: ${payload.area || "-"}`,
+    `오픈 예정일: ${payload.openDate || "-"}`,
+    `예산: ${payload.budget || "-"}`,
+    `채널: ${payload.channel || "-"}`,
+    `페이지: ${payload.pagePath || "-"}`,
+    "",
+    "공상플래닛 F&B 공간디자인 스튜디오",
+  ];
+
+  await fetch("https://api.sendgrid.com/v3/mail/send", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      personalizations: [
+        {
+          to: [{ email: toEmail }],
+          subject: `[공상플래닛] 상담 신청 (${payload.name || "이름 없음"})`,
+        },
+      ],
+      from: {
+        email: fromEmail,
+        name: "공상플래닛",
+      },
+      content: [
+        {
+          type: "text/plain",
+          value: lines.join("\n"),
+        },
+      ],
+    }),
+  });
 }
