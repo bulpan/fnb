@@ -225,8 +225,19 @@ export default function FnbNewProjectGallery({
                 </button>
 
                 <div className="overflow-hidden rounded-3xl bg-[#0b0c0f] shadow-[0_18px_40px_rgba(0,0,0,0.42)]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={activeSrc} alt={`${projectName} fullscreen`} className="h-[72vh] w-full object-contain" />
+                  <motion.div
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.2}
+                    onDragEnd={(_, info) => {
+                      if (info.offset.x > 60) go(-1);
+                      else if (info.offset.x < -60) go(1);
+                    }}
+                    className="cursor-grab"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={activeSrc} alt={`${projectName} fullscreen`} className="h-[72vh] w-full object-contain" />
+                  </motion.div>
                 </div>
               </motion.div>
             </div>
