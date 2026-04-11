@@ -35,6 +35,11 @@ export const metadata: Metadata = {
     description: "브랜드와 매출을 만드는 F&B 공간 디자인 스튜디오 - 공상플래닛",
     images: ["https://www.gongsangplanet.com/fnb/images/compressed/hero/main-entry-dowon.webp"],
   },
+  icons: {
+    icon: "/fnb/g-logo.svg",
+    shortcut: "/fnb/g-logo.svg",
+    apple: "/fnb/g-logo.svg",
+  },
 };
 
 export default function RootLayout({
